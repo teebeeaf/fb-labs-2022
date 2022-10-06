@@ -66,16 +66,16 @@ def beauty_bigrams(bigram: dict) -> str:
     beauty = ['\\'] # Creating a list with our matrix
     sym_count = len(alph) # Checking the number of letters in the alphabet
     for i in range(sym_count - 1): # using for cycle
-        beauty.append(f'      {alph[i]}') # Appending a letter to our list
+        beauty.append(f'        {alph[i]}') # Appending a letter to our list
     beauty.append('\n') # creating a new line
     for i in range(sym_count - 1): # Using a for cycle
         beauty.append(alph[i]) # Appending a letter from alphabet to our list
         for j in range(sym_count - 1): # Using for cycle again
             try: # Checking if bigram exists
-                temp = str(round(bigram[f'{alph[j]}{alph[i]}'], 5)) # Creating a bigram
-                beauty.append(f'{" " * (7 - len(temp))}{temp}') # Appending created bigram to our list
+                temp = str(round(bigram[f'{alph[j]}{alph[i]}'], 7)) # Creating a bigram
+                beauty.append(f'{" " * (9 - len(temp))}{temp}') # Appending created bigram to our list
             except KeyError: # if not
-                beauty.append('      0') # Appending zero to our list
+                beauty.append('        0') # Appending zero to our list
         beauty.append('\n') # Creating a new line
     return " ".join(beauty) # Returning it in the string type
 
@@ -151,4 +151,4 @@ if __name__ == "__main__":
         print(beauty_bigrams(bigrams_dict))
 
 
-    print(f"R: {round(count_R(h2_, symbol_count), 3)}")
+    print(f"R: {round(count_R(h2_s, symbol_count), 7)}")
