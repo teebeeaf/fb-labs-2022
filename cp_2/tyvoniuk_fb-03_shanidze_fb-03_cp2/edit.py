@@ -1,4 +1,4 @@
-with open('text.txt', 'r', encoding='utf-8') as file:
+with open('var20.txt', 'r', encoding='utf-8') as file:
     text = file.read()
 
 text.lower()
@@ -10,7 +10,7 @@ for i in text:
     if i in a:
         answer += i
     if i == '\n':
-        answer += ' '
+        answer += ''
     if i == 'ъ':
         answer += 'ь'
     if i == 'ё':
@@ -18,5 +18,5 @@ for i in text:
 
 answer = ' '.join(list(answer.split()))
 
-with open('finaltext.txt', 'w', encoding='utf-8') as file:
+with open('finaltextXD.txt', 'w', encoding='utf-8') as file:
     file.write(answer)

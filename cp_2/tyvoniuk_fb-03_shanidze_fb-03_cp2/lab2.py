@@ -23,7 +23,7 @@ def vigener_chel(plain_text, key, alphabet):
 
 CT = []
 for key in (key_0, key_1, key_2, key_3, key_jestkiy):
-    print(f"\n{key}:")
+    print(f"Ключ довжини {len(key)}, {key}:")
     CT.append(vigener_chel(text, key, alphabet))
     print(CT[-1])
 
@@ -39,12 +39,11 @@ def super_index(text, alphabet):
 
     return an/(n * (n - 1))
 
-
 n = 2
 for i in CT:
     if n == 6:
         n = 17
-    print(f"{n}:")
+    print(f"Ключ довжини {n}:")
     n += 1
     print(super_index(i, alphabet))
 
