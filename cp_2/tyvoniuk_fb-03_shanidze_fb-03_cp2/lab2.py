@@ -51,7 +51,7 @@ print(super_index(text, alphabet))
 
 print("Task 3")
 
-with open('finaltextXD.txt', 'r', encoding='utf-8') as file:
+with open('encoding.txt', 'r', encoding='utf-8') as file:
     text = file.read()
 
 
@@ -73,28 +73,34 @@ def rozbivka_na_gramy(text: str, n, stop):
         k += super_index(i, alphabet)
     return k/n
 
+
 def find_most_common(text: str, alphabet):
     temp = []
     for i in alphabet:
         temp.append(text.count(i))
     return temp.index(max(temp))
 
-
 for i in range(2,40):
     print(rozbivka_na_gramy(text, i, False))
 
-r = 14
+r = 16
 
-list_of_occurances = 'оеаинтсрвлкмдпуяыьгзбчйхжшюцщэфъ'
-index = alphabet.find('o')
-a = rozbivka_na_gramy(text, 14, True)
-solved = []
+a = rozbivka_na_gramy(text, r, True)
+solved_keys = []
 for i in a:
     y1 = find_most_common(i, alphabet)
     x1 = 14
-    solved.append(alphabet[((y1 - x1) % 32)])
-print(''.join(solved))
+    solved_keys.append(alphabet[((y1 - x1) % 32)])
 
+key = ''.join(solved_keys)
+print(key)
+new_text, num = '', 0
+while num < len(text):
+    new_text += alphabet[(alphabet.find(text[num]) - alphabet.find(key[num % r]))%32]
+    num += 1
+print(new_text)
 
+with open('decoding.txt', 'w', encoding='utf-8') as file:
+    file.write(new_text)
 
 
