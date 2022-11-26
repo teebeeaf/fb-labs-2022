@@ -11,8 +11,8 @@ for i in text:
         answer += i
     if i == '\n':
         answer += ''
-    if i == 'ъ':
-        answer += 'ь'
+    # if i == 'ъ':
+    #     answer += 'ь'
     if i == 'ё':
         answer += 'е'
 

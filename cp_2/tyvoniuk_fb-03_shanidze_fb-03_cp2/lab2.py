@@ -55,7 +55,7 @@ with open('finaltextXD.txt', 'r', encoding='utf-8') as file:
     text = file.read()
 
 
-def rozbivka_na_gramy(text, n):
+def rozbivka_na_gramy(text: str, n, stop):
     temp = []
     for i in range(n):
         j = i
@@ -65,12 +65,36 @@ def rozbivka_na_gramy(text, n):
             j += n
         temp.append(l)
 
-    return temp
+    if stop:
+        return temp
 
-mb_kluchi = []
-for i in range(2, 31):
-    mb_kluchi.append(rozbivka_na_gramy(text, i))
+    k = 0
+    for i in temp:
+        k += super_index(i, alphabet)
+    return k/n
 
-for i in mb_kluchi:
-    print(i)
-    print(super_index(i, alphabet))
+def find_most_common(text: str, alphabet):
+    temp = []
+    for i in alphabet:
+        temp.append(text.count(i))
+    return temp.index(max(temp))
+
+
+for i in range(2,40):
+    print(rozbivka_na_gramy(text, i, False))
+
+r = 14
+
+list_of_occurances = 'оеаинтсрвлкмдпуяыьгзбчйхжшюцщэфъ'
+index = alphabet.find('o')
+a = rozbivka_na_gramy(text, 14, True)
+solved = []
+for i in a:
+    y1 = find_most_common(i, alphabet)
+    x1 = 14
+    solved.append(alphabet[((y1 - x1) % 32)])
+print(''.join(solved))
+
+
+
+
