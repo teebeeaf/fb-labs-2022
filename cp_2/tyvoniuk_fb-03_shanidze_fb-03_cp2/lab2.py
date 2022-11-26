@@ -3,21 +3,21 @@ print("Task 1")
 
 alphabet = 'абвгдежзийклмнопрстуфхцчшщъыьэюя'
 
-key_0 = "де"
-key_1 = "при"
-key_2 = "вамб"
-key_3 = "глава"
-key_jestkiy = "жесткийключдлятрупацанов"
+key_0 = "эь"
+key_1 = "нрм"
+key_2 = "дзкц"
+key_3 = "яюьен"
+key_jestkiy = "жесткийключдлятру"
 
 with open('finaltext.txt', 'r', encoding='utf-8') as file:
     text = file.read()
+
 
 def vigener_chel(plain_text, key, alphabet):
     m = len(alphabet)
     cr = ""
     for i in range(len(plain_text) - 1):
         cr += f"{alphabet[(alphabet.find(plain_text[i]) + alphabet.find(key[i % len(key)])) % m]}"
-
     return cr
 
 
@@ -30,6 +30,7 @@ for key in (key_0, key_1, key_2, key_3, key_jestkiy):
 
 print("Task 2")
 
+
 def super_index(text, alphabet):
     an = 0
     n = len(text)
@@ -39,12 +40,13 @@ def super_index(text, alphabet):
     return an/(n * (n - 1))
 
 
-n = 0
+n = 2
 for i in CT:
+    if n == 6:
+        n = 17
     print(f"{n}:")
     n += 1
     print(super_index(i, alphabet))
 
-print("PT:\1+\+4"
-      "")
+print("Відкритий текст:")
 print(super_index(text, alphabet))
