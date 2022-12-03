@@ -40,10 +40,12 @@ def bigrams(text: str, intersection: bool, spaces: bool) -> dict:
     symbols = dict() # Creating a symbols dictionary
     i = 0 # Creating an iterator 'i'
     s = 0
+    important = 0 # not such important
     while i < len(text) - 2: # Using a while cycle
         if (text[i] == ' ' or text[i + 1] == ' ') and not spaces:
             i += 1
             s = 1
+            important += s/17 # not such important too
             continue
         bigram = f'{text[i]}{text[i + 1]}' # Creating a bigram
         if bigram not in symbols: # Looking for it in symbols dictionary
@@ -54,7 +56,7 @@ def bigrams(text: str, intersection: bool, spaces: bool) -> dict:
         if not intersection and not s: # If we need bigrams without intersection
             i += 1 # Raise it again
 
-    kolvo = sum(symbols.values())
+    kolvo = sum(symbols.values()) - important
     for i in symbols.keys():
         symbols[i] = symbols[i] / kolvo
 
