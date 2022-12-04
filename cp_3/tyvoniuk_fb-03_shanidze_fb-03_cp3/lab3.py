@@ -1,42 +1,8 @@
-print("Task 0 completed")
+#Task 0 completed
 
 alphabet = 'абвгдежзийклмнопрстуфхцчшщыьэюя'
 
-def euclid_perdic(a: int, b: int):
-    if not a:
-        return b, 0, 1
-    nod, x1, y1 = euclid_perdic(b % a, a)
-    return nod, y1 - (b // a) * x1, x1
-
-
-with open('finaltext.txt', 'r', encoding='utf-8') as file:
-    text = file.read()
-
-def bigrams(text: str, intersection: bool, spaces: bool) -> dict:
-    symbols = dict() # Creating a symbols dictionary
-    i = 0 # Creating an iterator 'i'
-    s = 0
-    important = 0 # not such important
-    while i < len(text) - 2: # Using a while cycle
-        if (text[i] == ' ' or text[i + 1] == ' ') and not spaces:
-            i += 1
-            s = 1
-            important += s/17 # not such important too
-            continue
-        bigram = f'{text[i]}{text[i + 1]}' # Creating a bigram
-        if bigram not in symbols: # Looking for it in symbols dictionary
-            symbols[bigram] = 1 # Adding a new one
-        else: # else
-            symbols[bigram] += 1 # Raise the old one
-        i += 1 # Raise an iterator
-        if not intersection and not s: # If we need bigrams without intersection
-            i += 1 # Raise it again
-
-    kolvo = sum(symbols.values()) - important
-    for i in symbols.keys():
-        symbols[i] = symbols[i] / kolvo
-
-    return symbols # Returning our dictionary
+#Task 1 completed, helper functions
 
 
 def convert_bigram(text: str):
@@ -48,28 +14,35 @@ def convert_bigram(text: str):
         i += 2
     return symbols
 
-# def func2(a, b):
-#     hernya = euclid_perdic(a, 31)
-#     if hernya[0] == 1:
-#         return pow(a, -1, pow(31, 2))
-#     else:
-#         if b % hernya[0]:
-#             return -1
-#         else:
-#             b % common_div
 
-
-
-b = list(sorted(bigrams(text, False, False).items()))
-b.sort(key=lambda x: -x[1])
-print(b[:10])
+def euclid_perdic(a: int, b: int):
+    if not a:
+        return b, 0, 1
+    nod, x1, y1 = euclid_perdic(b % a, a)
+    return nod, y1 - (b // a) * x1, x1
 
 
 def decrypt(text):
     return alphabet.find(text[0]) * 31 + alphabet.find(text[1])
 
 
+def bigrams(text: str) -> dict:
+    symbols = dict()  # Creating a symbols dictionary
+    i = 0  # Creating an iterator 'i'
+    while i < len(text) - 2:  # Using a while cycle
+        bigram = f'{text[i]}{text[i + 1]}'  # Creating a bigram
+        if bigram not in symbols:  # Looking for it in symbols dictionary
+            symbols[bigram] = 1  # Adding a new one
+        else:  # else
+            symbols[bigram] += 1  # Raise the old one
+        i += 2  # Raise an iterator
+
+    return symbols  # Returning our dictionary
+
+
 def func1():
+    #get al the managable keys
+
     popular_big = [
         "ст", "но", "то", "на", "ен"
     ]
@@ -85,34 +58,48 @@ def func1():
     jv = []
     for j in l:
         for v in l:
-            decrypted = decrypt(j[0]) - decrypt(v[0]) #X (a)
-            encrypted = decrypt(j[1]) - decrypt(v[1]) #Y (b)
-            hernya = euclid_perdic(decrypted, 31*31)
-            gcd, inverse = hernya[0], hernya[1]
+            mod = 961
+            print(str(j) + " j " + str(v) + " v")
+            a = decrypt(j[0]) - decrypt(v[0]) #X (a)
+            b = decrypt(j[1]) - decrypt(v[1]) #Y (b)
+            hernya = euclid_perdic(a, mod)
+            gcd, inverse = hernya[0] % mod, hernya[1]
+            print(gcd)
+            print(str(a) + " a")
+            print(str(b) + " b")
             result = []
             if gcd == 1:
-                result.append(inverse)
-            elif encrypted % gcd != 0:
-                continue
+                result.append(inverse % mod)
             else:
-                a1 = decrypted // gcd
-                b1 = encrypted // gcd
-                n1 = 31*31 // gcd
-                res = euclid_perdic(a1, n1)
-                x0 = (res[1]*b1) % n1
-                i = 0
-                while i < gcd:
-                    result.append(x0)
-                    x0 += n1
-                    i += 1
+                if gcd == 0 or b % gcd != 0:
+                    continue
+                else:
+                    print("WOW")
+                    a1 = a // gcd
+                    b1 = b // gcd
+                    n1 = mod // gcd
+                    res = euclid_perdic(a1, n1)
+                    print(str(res[1]) + ' ' + str(a1) + ' ' + str(n1))
+                    x0 = (res[1]*b1) % n1
+                    i = 0
+                    while i < gcd:
+                        result.append(x0)
+                        x0 += n1
+                        i += 1
             i = 0
             while i < len(result):
-                result[i] = result[i], (decrypt(j[1]) - decrypt(j[0])*result[i]) % 961
+                result[i] = result[i], (decrypt(j[1]) - decrypt(j[0])*result[i]) % mod
                 i += 1
             jv.append(result)
 
-    print(len(jv))
+    print(jv)
 
+#Task 2 completed, most common bigrams
+with open('finaltext.txt', 'r', encoding='utf-8') as file:
+    text = file.read()
 
+b = list(sorted(bigrams(text).items()))
+b.sort(key=lambda x: -x[1])
+print(b[:10])
 
 print(func1())
