@@ -5,9 +5,7 @@ alphabet = 'абвгдежзийклмнопрстуфхцчшщыьэюя'
 def euclid_perdic(a: int, b: int):
     if not a:
         return b, 0, 1
-
     nod, x1, y1 = euclid_perdic(b % a, a)
-
     return nod, y1 - (b // a) * x1, x1
 
 
@@ -45,20 +43,20 @@ def convert_bigram(text: str):
     symbols = list()  # Creating a symbols dictionary
     i = 0  # Creating an iterator 'i'
     while i < len(text) - 2:  # Using a while cycle
-        x = alphabet.find(text[i]) * len(alphabet) + text[i + 1]
+        x = alphabet.find(text[i]) * len(alphabet) + alphabet.find(text[i + 1])
         symbols.append(x)
         i += 2
     return symbols
 
-def func2(a, b):
-    hernya = euclid_perdic(a, 31)
-    if hernya[0] == 1:
-        return pow(a, -1, pow(31, 2))
-    else:
-        if b % hernya[0]:
-            return -1
-        else:
-            b % common_div
+# def func2(a, b):
+#     hernya = euclid_perdic(a, 31)
+#     if hernya[0] == 1:
+#         return pow(a, -1, pow(31, 2))
+#     else:
+#         if b % hernya[0]:
+#             return -1
+#         else:
+#             b % common_div
 
 
 
@@ -87,12 +85,34 @@ def func1():
     jv = []
     for j in l:
         for v in l:
-            decrypted = decrypt(j[0]) - decrypt(v[0])
-            encrypted = decrypt(j[1]) - decrypt(v[1])
-            b = decrypt(j[1]) - a * decrypt(j[0])
-            jv.append((a, b))
-    print(jv)
+            decrypted = decrypt(j[0]) - decrypt(v[0]) #X (a)
+            encrypted = decrypt(j[1]) - decrypt(v[1]) #Y (b)
+            hernya = euclid_perdic(decrypted, 31*31)
+            gcd, inverse = hernya[0], hernya[1]
+            result = []
+            if gcd == 1:
+                result.append(inverse)
+            elif encrypted % gcd != 0:
+                continue
+            else:
+                a1 = decrypted // gcd
+                b1 = encrypted // gcd
+                n1 = 31*31 // gcd
+                res = euclid_perdic(a1, n1)
+                x0 = (res[1]*b1) % n1
+                i = 0
+                while i < gcd:
+                    result.append(x0)
+                    x0 += n1
+                    i += 1
+            i = 0
+            while i < len(result):
+                result[i] = result[i], (decrypt(j[1]) - decrypt(j[0])*result[i]) % 961
+                i += 1
+            jv.append(result)
+
+    print(len(jv))
 
 
 
-func1()
+print(func1())
