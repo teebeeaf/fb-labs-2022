@@ -14,12 +14,17 @@ def convert_bigram(text: str):
         i += 2
     return symbols
 
+# def linear_equations(a, b, n):
+#         if a
+
+
 
 def euclid_perdic(a: int, b: int):
-    if not a:
-        return b, 0, 1
-    nod, x1, y1 = euclid_perdic(b % a, a)
-    return nod, y1 - (b // a) * x1, x1
+    while
+    div = b // a
+    rest = b % a
+
+    return y1 - (b // a) * x1
 
 
 def decrypt(text):
@@ -49,6 +54,7 @@ def func1():
     our_big = [
         'уф', 'иж', 'ьи', 'хф', 'щф'
     ]
+
     l = []
     for i in popular_big:
         for j in our_big:
@@ -58,15 +64,14 @@ def func1():
     jv = []
     for j in l:
         for v in l:
-            mod = 961
             print(str(j) + " j " + str(v) + " v")
-            a = decrypt(j[0]) - decrypt(v[0]) #X (a)
-            b = decrypt(j[1]) - decrypt(v[1]) #Y (b)
+            mod = 961
+            a_x, b_x = decrypt(j[0]), decrypt(j[1])
+            a = decrypt(j[0]) - decrypt(v[0]) #X* - X** (a)
+            b = decrypt(j[1]) - decrypt(v[1]) #Y* - Y** (b)
             hernya = euclid_perdic(a, mod)
             gcd, inverse = hernya[0] % mod, hernya[1]
             print(gcd)
-            print(str(a) + " a")
-            print(str(b) + " b")
             result = []
             if gcd == 1:
                 result.append(inverse % mod)
@@ -74,7 +79,6 @@ def func1():
                 if gcd == 0 or b % gcd != 0:
                     continue
                 else:
-                    print("WOW")
                     a1 = a // gcd
                     b1 = b // gcd
                     n1 = mod // gcd
@@ -102,4 +106,9 @@ b = list(sorted(bigrams(text).items()))
 b.sort(key=lambda x: -x[1])
 print(b[:10])
 
-print(func1())
+# print(func1())
+
+print(euclid_perdic(12, 961))
+print(euclid_perdic(58, 961))
+print(euclid_perdic(301, 961))
+print(euclid_perdic(452, 961))
