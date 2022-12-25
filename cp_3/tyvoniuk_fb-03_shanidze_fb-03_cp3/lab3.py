@@ -1,26 +1,20 @@
 #Task 0 completed
 
-alphabet = 'абвгдежзийклмнопрстуфхцчшщыьэюя'
+alphabet = 'абвгдежзийклмнопрстуфхцчшщьыэюя'
 
 #Task 1 completed, helper functions
 
-def convert_bigram(text: str, bool = 0):
+def convert_bigram(text: str):
     symbols = list()  # Creating a symbols dictionary
     i = 0  # Creating an iterator 'i'
-    crypted = [] # Creating a crypt
     while i <= len(text) - 2:  # Using a while cycle
         x = alphabet.find(text[i]) * len(alphabet) + alphabet.find(text[i + 1])
         symbols.append(x)
-        crypted.append(x)
         i += 2
-
-    if bool:
-        return crypted
-
     return symbols
 
 
-def euclid_rev(a: int, b: int): #player reverse func
+def euclid_rev(a: int, b: int): #player inverse func
     return pow(a, -1, b)
 
 
@@ -65,18 +59,6 @@ def linear_equations(a: int, b: int, mod: int): #returns an (a) of possible key
     return possible_a
 
 
-# print(linear_gcd(35,5))
-#
-# print(linear_euclid(608,961))
-#
-# print(euclid_rev(608,961))
-
-# def linear_equations(a, b, n):
-#         if a
-
-# print(linear_equations(31,93,961))
-
-
 def decrypt(text):
     return alphabet.find(text[0]) * 31 + alphabet.find(text[1])
 
@@ -96,19 +78,10 @@ def bigrams(text: str) -> dict:
 
 
 #Task 2 completed, most common bigrams
-with open('finaltext.txt', 'r', encoding='utf-8') as file:
-    text = file.read()
 
 
-def get_all_the_keys():
-    # get al the managable keys
-
-    b = list(sorted(bigrams(text).items()))
-    b.sort(key=lambda x: -x[1])
-
-    our_big = []
-    for i in b[:5]:
-        our_big.append(i[0])
+def get_all_the_keys(our_big):
+    # get all the managable keys
 
     popular_big = ["ст", "но", "то", "на", "ен"]
 
@@ -126,9 +99,9 @@ def get_all_the_keys():
             a_x, b_x = decrypt(word1[0]), decrypt(word1[1])  # for b calculation
             a = decrypt(word1[0]) - decrypt(word2[0])  # X* - X** (a)
             b = decrypt(word1[1]) - decrypt(word2[1])  # Y* - Y** (b)
-            #
-            # if a == 0:
-            #     continue
+
+            if a == 0:
+                continue
 
             possible_a = linear_equations(a, b, mod)
 
@@ -136,79 +109,69 @@ def get_all_the_keys():
                 if linear_gcd(a, 31) != -1:
                     possible_b = (b_x - i * a_x) % mod
                     word1_word2.append((i, possible_b))
-                else:
-                    continue
-
-            #
-            #
-            #
-            # gcd, inverse = hernya[0] % mod, hernya[1]
-            # print(gcd)
-            # result = []
-            # if gcd == 1:
-            #     result.append(inverse % mod)
-            # else:
-            #     if gcd == 0 or b % gcd != 0:
-            #         continue
-            #     else:
-            #         a1 = a // gcd
-            #         b1 = b // gcd
-            #         n1 = mod // gcd
-            #         res = euclid_perdic(a1, n1)
-            #         print(str(res[1]) + ' ' + str(a1) + ' ' + str(n1))
-            #         x0 = (res[1]*b1) % n1
-            #         i = 0
-            #         while i < gcd:
-            #             result.append(x0)
-            #             x0 += n1
-            #             i += 1
-            # i = 0
-            # while i < len(result):
-            #     result[i] = result[i], (decrypt(word1[1]) - decrypt(word1[0]) * result[i]) % mod
-            #     i += 1
 
     word1_word2 = list(set(word1_word2))
     print(word1_word2)
     return word1_word2
 
-keys = get_all_the_keys()
 
-get_crypt = convert_bigram(text)
+def check_keys_for_possibility(keys, get_crypt):
+    impossible_bigrams = ['жь','кь','аы','оы','ьь','ыы','оь','эы',
+                      'юь','яь','эь','ць','ыь','ыь','уь','еь','юы','яы']
 
-print('Amount of keys: ' + str(len(keys)))
+    bruh = [] #container for best keys
 
-impossible_bigrams = ['хь', 'кь','аы','оы','иы','ыы','уы','еы','аь','оь','эы',
-                      'юь','яь','эь','ць','иь','ыь','уь','еь','юы','яы']
+    for i in keys:
+        a, b = i[0], i[1]
+        print(f'Keys: {a}, {b}')
+        decrypted = ''
+        stop_the_shi = 0
+        for i in get_crypt:
+            a_rev = linear_euclid(a, 961)
+            deci_x = ((i - b) % 961 * a_rev) % 961
+            word = str(alphabet[deci_x // 31]) + str(alphabet[deci_x % 31])
+            if word in impossible_bigrams: # check if bigram appears in banned bigrams and break the cycle
+                stop_the_shi = 1
+                break
+            decrypted += word
 
-for i in keys:
-    a, b = i[0], i[1]
-    decrypted = ''
-    stop_the_shit = 0
-    for i in get_crypt:
-        a_rev = linear_euclid(a, 961)
-        deci_x = ((i - b) * a_rev) % 961
-        word = str(alphabet[deci_x // 31]) + str(alphabet[deci_x % 31])
-        if word in impossible_bigrams:
-            stop_the_shit = 1
-        decrypted += word
+        if stop_the_shi or not a:
+            print("Wrong key, impossible bigram!")
+            continue
 
-    if stop_the_shit:
-        print("Wrong key, impossible bigram!")
-        continue
+        print(decrypted)
 
-    print(f'Keys: {a}, {b},({a_rev})')
-    print(decrypted)
-    pop = []
-    list2 = list(sorted(bigrams(decrypted).items()))
-    list2.sort(key=lambda x: -x[1])
-    for i in list2[:5]:
-        pop.append(i[0])
-    print(pop)
+        list2 = list(sorted(bigrams(decrypted).items()))
+        list2.sort(key=lambda x: -x[1])
+        pop = list(zip(*(list2[:5])))[0]
+        print(pop)
+        bruh.append((a, b))
 
-    # with open('bob.txt', 'a', encoding='utf-8') as file:
-    #     file.write(f'Keys: {a}, {b},( {a_rev}\n')
-    #     file.write(f'{decrypted}\n')
+    return bruh
 
 
 
+def main():
+    with open('finaltext.txt', 'r', encoding='utf-8') as file:
+        text = file.read()
 
+    b = list(sorted(bigrams(text).items()))
+    b.sort(key=lambda x: -x[1])
+    print(f'Most common bigrams: {b[:10]}')
+
+    keys = get_all_the_keys(list(zip(*(b[:5])))[0]) #all the possible keys for that text
+    print('Amount of keys: ' + str(len(keys)))
+
+    get_crypt = convert_bigram(text) #numbers for every bigram in text
+
+    answer = check_keys_for_possibility(keys, get_crypt) #checking all the keys on decoding
+
+    print(f"The real key potential is in: {answer}")
+
+if __name__ == '__main__':
+    main()
+
+# with open('bob.txt', 'a', encoding='utf-8') as file:
+#     file.write(f'Keys: {a}, {b}\n')
+#     file.write(f'{pop}\n')
+#     file.write(f'{decrypted}\n')
