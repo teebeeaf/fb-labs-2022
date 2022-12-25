@@ -4,7 +4,6 @@ alphabet = 'абвгдежзийклмнопрстуфхцчшщыьэюя'
 
 #Task 1 completed, helper functions
 
-
 def convert_bigram(text: str, bool = 0):
     symbols = list()  # Creating a symbols dictionary
     i = 0  # Creating an iterator 'i'
@@ -100,21 +99,19 @@ def bigrams(text: str) -> dict:
 with open('finaltext.txt', 'r', encoding='utf-8') as file:
     text = file.read()
 
-b = list(sorted(bigrams(text).items()))
-b.sort(key=lambda x: -x[1])
-print(b[:10])
 
 def get_all_the_keys():
     # get al the managable keys
-    popular_big = [
-        "ст", "но", "то", "на", "ен"
-    ]
-    our_big = [
-        'уф', 'иж', 'ьи', 'хф', 'щф'
-    ]
-    # our_big = [
-    #     'шф', 'уй', 'ду', 'цф', 'кч'
-    # ]
+
+    b = list(sorted(bigrams(text).items()))
+    b.sort(key=lambda x: -x[1])
+
+    our_big = []
+    for i in b[:5]:
+        our_big.append(i[0])
+
+    popular_big = ["ст", "но", "то", "на", "ен"]
+
     l = []
     for i in popular_big:
         for word1 in our_big:
@@ -129,9 +126,9 @@ def get_all_the_keys():
             a_x, b_x = decrypt(word1[0]), decrypt(word1[1])  # for b calculation
             a = decrypt(word1[0]) - decrypt(word2[0])  # X* - X** (a)
             b = decrypt(word1[1]) - decrypt(word2[1])  # Y* - Y** (b)
-
-            if a == 0:
-                continue
+            #
+            # if a == 0:
+            #     continue
 
             possible_a = linear_equations(a, b, mod)
 
@@ -178,17 +175,36 @@ keys = get_all_the_keys()
 
 get_crypt = convert_bigram(text)
 
-print(len(keys))
+print('Amount of keys: ' + str(len(keys)))
+
+impossible_bigrams = ['хь', 'кь','аы','оы','иы','ыы','уы','еы','аь','оь','эы',
+                      'юь','яь','эь','ць','иь','ыь','уь','еь','юы','яы']
+
 for i in keys:
     a, b = i[0], i[1]
     decrypted = ''
+    stop_the_shit = 0
     for i in get_crypt:
         a_rev = linear_euclid(a, 961)
         deci_x = ((i - b) * a_rev) % 961
         word = str(alphabet[deci_x // 31]) + str(alphabet[deci_x % 31])
+        if word in impossible_bigrams:
+            stop_the_shit = 1
         decrypted += word
-    print(f'Keys: {a}, {b},( {a_rev}')
+
+    if stop_the_shit:
+        print("Wrong key, impossible bigram!")
+        continue
+
+    print(f'Keys: {a}, {b},({a_rev})')
     print(decrypted)
+    pop = []
+    list2 = list(sorted(bigrams(decrypted).items()))
+    list2.sort(key=lambda x: -x[1])
+    for i in list2[:5]:
+        pop.append(i[0])
+    print(pop)
+
     # with open('bob.txt', 'a', encoding='utf-8') as file:
     #     file.write(f'Keys: {a}, {b},( {a_rev}\n')
     #     file.write(f'{decrypted}\n')
