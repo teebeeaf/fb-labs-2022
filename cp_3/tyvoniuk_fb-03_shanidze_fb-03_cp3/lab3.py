@@ -146,7 +146,9 @@ def check_keys_for_possibility(keys, get_crypt):
         pop = list(zip(*(list2[:5])))[0]
         print(pop)
         bruh.append((a, b))
-
+        with open('bob2.txt', 'a', encoding='utf-8') as file:
+            file.write(f'Keys: {a}, {b}\n')
+            file.write(f'{decrypted}\n')
     return bruh
 
 
@@ -171,7 +173,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-# with open('bob.txt', 'a', encoding='utf-8') as file:
-#     file.write(f'Keys: {a}, {b}\n')
-#     file.write(f'{pop}\n')
-#     file.write(f'{decrypted}\n')
