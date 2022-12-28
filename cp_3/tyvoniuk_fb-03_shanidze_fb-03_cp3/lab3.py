@@ -27,36 +27,34 @@ def linear_gcd(a: int, b: int): #returns gcd of nums
     return b
 
 
-def linear_euclid(a: int, b: int): # returns inverse with mod
-    a = a%b
-    mod = b
-    if a == 0:
+def linear_euclid(dividend: int, divisor: int):
+    dividend = dividend % divisor
+    modulus = divisor
+    if not dividend:
         return 0
-    nodes = [1, 0]
-    while b != 0:
-        nodes = [nodes[1], nodes[0] - (a // b) * nodes[1]]
-        a, b = b, a % b
-    return nodes[0] % mod
+    values = [1, 0]
+    while divisor:
+        values = [values[1], values[0] - (dividend // divisor) * values[1]]
+        dividend, divisor = divisor, dividend % divisor
+    return values[0] % modulus
 
 
-def linear_equations(a: int, b: int, mod: int): #returns an (a) of possible key
-    possible_a = []
-    gcd = linear_gcd(a % mod, mod)
+def linear_equations(coeff: int, constant: int, modulus: int): #returns an (a) of possible key
+    possible_values = list()
+    gcd = linear_gcd(coeff % modulus, modulus)
     counter = 0
     if gcd == 1:
-        possible_a.append(linear_euclid(a,mod))
+        possible_values.append(linear_euclid(coeff, modulus))
         counter += 1
     else:
-        if b % gcd == 0:
-            a1 = a // gcd
-            b1 = b // gcd
-            n1 = mod // gcd
-            x0 = linear_euclid(a1, n1)
-            x0 = x0 * b1 % n1
+        if constant % gcd == 0:
+            a1, b1, n1 = coeff // gcd, constant // gcd, modulus // gcd
+            root = linear_euclid(a1, n1)
+            root = root * b1 % n1
             for i in range(gcd):
-                possible_a.append(x0 + i * n1)
+                possible_values.append(root + i * n1)
                 counter += 1
-    return possible_a
+    return possible_values
 
 
 def decrypt(text):
