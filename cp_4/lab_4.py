@@ -59,7 +59,7 @@ def miller_rabin(number):
 def generate_prime(size):
     while True:
         number = gen_int_size(size)
-        # print(f"{num} is {millet_rabin(num)}")
+        # print(f"{number} is {miller_rabin(number)}")
         is_prime = miller_rabin(number)
         if is_prime:
             return number
